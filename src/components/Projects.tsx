@@ -21,8 +21,8 @@ const allProjects = [
     {
         title: 'SoleCraft',
         subtitle: '3D Footwear Configurator',
-        description: 'A premium e-commerce platform that allows users to design, customize, and purchase high-end footwear using a real-time 3D configurator. Built with Three.js and Laravel for advanced material selection.',
-        tech: ['Three.js', 'Laravel 11', 'Vite', 'GSAP'],
+        description: 'A premium e-commerce platform that allows users to design, customize, and purchase high-end footwear using a real-time 3D configurator. Built with Next.js, React, and Three.js for advanced material selection.',
+        tech: ['Next.js', 'React', 'Three.js', 'R3F', 'Tailwind CSS', 'Zustand', 'SQLite', 'TypeScript'],
         link: '#',
         github: 'https://github.com/aditya-manas02/solecraft',
         image: solecraftImg,
