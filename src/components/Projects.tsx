@@ -42,7 +42,7 @@ const allProjects = [
         title: 'Sevantra',
         subtitle: 'Civic Engagement Platform',
         description: 'A comprehensive monorepo platform designed to bridge the gap between citizens and NGOs. Features secure Google OAuth, real-time dynamic statistics, and an admin command center for verifying organizations.',
-        tech: ['Next.js', 'Express', 'Prisma', 'PostgreSQL'],
+        tech: ['Next.js', 'Turborepo', 'Express.js', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Framer Motion', 'Zustand', 'React Query'],
         link: 'https://sevantra.vercel.app/',
         github: 'https://github.com/aditya-manas02/sevantra',
         image: sevantraImg,
