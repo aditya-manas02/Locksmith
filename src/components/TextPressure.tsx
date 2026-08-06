@@ -134,12 +134,7 @@ const TextPressure = ({
   useEffect(() => {
     let rafId: number;
     const animate = () => {
-      if (!isHovering.current && containerRef.current) {
-        const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-        const time = Date.now() / 1000;
-        cursorRef.current.x = left + width / 2 + Math.sin(time * 2) * (width / 3);
-        cursorRef.current.y = top + height / 2 + Math.cos(time * 1.5) * (height / 3);
-      }
+
 
       mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
       mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15;
@@ -159,8 +154,8 @@ const TextPressure = ({
 
           const d = dist(mouseRef.current, charCenter);
 
-          const wdth = width ? Math.floor(getAttr(d, maxDist, 5, 200)) : 100;
-          const wght = weight ? Math.floor(getAttr(d, maxDist, 100, 900)) : 400;
+          const wdth = width ? Math.floor(getAttr(d, maxDist, 50, 200)) : 100;
+          const wght = weight ? Math.floor(getAttr(d, maxDist, 400, 900)) : 400;
           const italVal = italic ? getAttr(d, maxDist, 0, 1).toFixed(2) : 0;
           const alphaVal = alpha ? getAttr(d, maxDist, 0, 1).toFixed(2) : 1;
 
