@@ -64,6 +64,7 @@ const TextPressure = ({
 
   const mouseRef = useRef({ x: 0, y: 0 });
   const cursorRef = useRef({ x: 0, y: 0 });
+  const isHovering = useRef(false);
 
   const [fontSize, setFontSize] = useState(minFontSize);
   const [scaleY, setScaleY] = useState(1);
@@ -133,6 +134,13 @@ const TextPressure = ({
   useEffect(() => {
     let rafId: number;
     const animate = () => {
+      if (!isHovering.current && containerRef.current) {
+        const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+        const time = Date.now() / 1000;
+        cursorRef.current.x = left + width / 2 + Math.sin(time * 2) * (width / 3);
+        cursorRef.current.y = top + height / 2 + Math.cos(time * 1.5) * (height / 3);
+      }
+
       mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
       mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15;
 
@@ -211,6 +219,8 @@ const TextPressure = ({
   return (
     <div
       ref={containerRef}
+      onMouseEnter={() => (isHovering.current = true)}
+      onMouseLeave={() => (isHovering.current = false)}
       style={{
         position: 'relative',
         width: '100%',
