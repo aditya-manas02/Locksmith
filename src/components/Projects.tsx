@@ -3,49 +3,27 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Github, ArrowUpRight } from 'lucide-react';
 
 import safetywatchImg from '../assets/safetywatch.png';
-import solecraftImg from '../assets/solecraft.png';
-import emotionBeatImg from '../assets/emotion-beat.png';
 import sevantraImg from '../assets/sevantra.png';
 
 const allProjects = [
     {
-        title: 'SafetyWatch',
-        subtitle: 'Community Safety Platform',
-        description: 'A full-stack web application developed using React and Node.js to enable users to report and track neighborhood safety incidents in real time. Features secure JWT authentication and real-time interactive mapping.',
-        tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Capacitor', 'Gemini AI', 'Leaflet', 'React Query'],
-        link: 'https://www.safetywatch.me/',
-        github: 'https://github.com/aditya-manas02/safetywatch-frontend',
-        image: safetywatchImg,
-        live: true,
-    },
-    {
-        title: 'SoleCraft',
-        subtitle: '3D Footwear Configurator',
-        description: 'A premium e-commerce platform that allows users to design, customize, and purchase high-end footwear using a real-time 3D configurator. Built with Next.js, React, and Three.js for advanced material selection.',
-        tech: ['Next.js', 'React', 'Three.js', 'R3F', 'Tailwind CSS', 'Zustand', 'SQLite', 'TypeScript'],
-        link: '#',
-        github: 'https://github.com/aditya-manas02/solecraft',
-        image: solecraftImg,
-        live: false,
-    },
-    {
-        title: 'Emotion Beat',
-        subtitle: 'AI Music Curator',
-        description: 'An AI-powered web app that generates personalized music playlists based on your current emotion or activity. The bot curates tracks that vibe with your mood automatically using advanced public music APIs.',
-        tech: ['React', 'Tailwind', 'AI APIs', 'Audio'],
-        link: 'https://emotion-beat-curator-bot.vercel.app/',
-        github: 'https://github.com/aditya-manas02/emotion-beat-curator-bot',
-        image: emotionBeatImg,
-        live: true,
-    },
-    {
         title: 'Sevantra',
         subtitle: 'Civic Engagement Platform',
-        description: 'A comprehensive monorepo platform designed to bridge the gap between citizens and NGOs. Features secure Google OAuth, real-time dynamic statistics, and an admin command center for verifying organizations.',
-        tech: ['Next.js', 'Turborepo', 'Express.js', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Framer Motion', 'Zustand', 'React Query'],
+        description: 'Engineered a full-stack civic engagement platform enabling citizens and NGOs to seamlessly connect, manage organizations, and collaborate on local events. Implemented secure authentication with OTP verification and Google OAuth, alongside a robust role-based system and an admin dashboard with real-time analytics. Architected as a scalable Turborepo monorepo with a Next.js frontend and Express.js backend, utilizing Prisma ORM with PostgreSQL, deployed on Vercel and Render.',
+        tech: ['Next.js', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'Turborepo'],
         link: 'https://sevantra.vercel.app/',
         github: 'https://github.com/aditya-manas02/sevantra',
         image: sevantraImg,
+        live: true,
+    },
+    {
+        title: 'SafetyWatch',
+        subtitle: 'Community Safety Platform',
+        description: 'Developed a comprehensive neighborhood safety application enabling users to report incidents, track local crime via interactive heatmaps, and participate in gamified safety challenges. Built a real-time private messaging system with Cloudinary-backed screenshot moderation, alongside a life-saving SOS feature that instantly alerts contacts via Telegram webhooks and SMS. Created Nexus AI, an intelligent security assistant powered by Google Gemini, programmed with strict system prompts to provide hyper-focused safety guidance. Managed JWT & Firebase authentication, comprehensive administrative dashboards for bulk incident management, and automated system audit logging.',
+        tech: ['React (Vite)', 'Node.js', 'Express', 'MongoDB (Mongoose)', 'Google Gemini AI', 'Telegram Bot API', 'Cloudinary', 'Firebase', 'JWT', 'Zod'],
+        link: 'https://www.safetywatch.me/',
+        github: 'https://github.com/aditya-manas02/safetywatch-frontend',
+        image: safetywatchImg,
         live: true,
     }
 ];

@@ -8,7 +8,7 @@ const education = [
         period: 'August 2023 - Present',
         location: 'Punjab, India',
         details: [
-            'Current CGPA: 6.90'
+            'Current CGPA: 6.99'
         ]
     },
     {
