@@ -6,21 +6,21 @@ const experiences = [
         title: 'Java Fundamentals Trainee',
         company: 'Skill Stones',
         period: 'June 2025 - July 2025',
-        description: 'Learned core Java programming concepts and Object-Oriented Programming (OOP). Implemented Java programs using classes, objects, inheritance, polymorphism, abstraction, and encapsulation. Gained knowledge of control structures, arrays, strings, methods, and exception handling.',
+        description: 'Completed an intensive summer training in Java Fundamentals, solidifying understanding of core programming concepts and object-oriented principles. Established a strong foundation for building robust applications.',
         icon: <Briefcase className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
     },
     {
-        title: 'Problem Solver',
-        company: 'LeetCode & HackerRank',
-        period: 'July 2026',
-        description: 'Solved 100+ coding problems on LeetCode, strengthening data structures and algorithms, and problem-solving skills. Achieved a 5-Star C++ rating on HackerRank through consistent problem-solving performance.',
+        title: 'Participant',
+        company: 'BinaryBlitz Hackathon',
+        period: 'March 2024',
+        description: 'Competed in a fast-paced coding hackathon, focusing on building innovative tech solutions under tight deadlines.',
         icon: <Award className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
     },
     {
         title: 'Participant',
-        company: 'University Level Hackathons',
+        company: 'CodeOffDuty Hackathon',
         period: 'March 2024',
-        description: 'Participated in BinaryBlitz and CodeOffDuty university level Hackathons.',
+        description: 'Participated in a collaborative hackathon to develop creative software applications, collaborating with peers to solve complex problems.',
         icon: <Award className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
     }
 ];
