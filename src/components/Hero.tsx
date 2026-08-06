@@ -3,6 +3,8 @@ import { Github, Linkedin, ArrowRight, MapPin, Download, Sparkles } from 'lucide
 import React, { useState, useEffect } from 'react';
 import profilePic from '../assets/formal-pic-2.jpg';
 
+import TextPressure from './TextPressure';
+
 // Reusable 3D Tilt Card Component
 const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
     const x = useMotionValue(0);
@@ -73,9 +75,32 @@ const Hero = () => {
                             <span className="luxury-pill px-5 py-2 text-xs font-semibold tracking-wide text-secondary mb-8 inline-block">
                                 AVAILABLE FOR WORK
                             </span>
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tighter text-primary leading-[1.1] mb-6">
-                                Aditya <span className="text-zinc-400">Manas</span>
-                            </h1>
+                            <div className="flex items-center gap-2 mb-6 w-full" style={{ height: '80px', maxWidth: '600px' }}>
+                                <div className="flex-1 h-full">
+                                    <TextPressure 
+                                        text="Aditya" 
+                                        textColor="#18181b" 
+                                        flex={true} 
+                                        alpha={false} 
+                                        stroke={false} 
+                                        width={true} 
+                                        weight={true} 
+                                        italic={true} 
+                                    />
+                                </div>
+                                <div className="flex-1 h-full">
+                                    <TextPressure 
+                                        text="Manas" 
+                                        textColor="#a1a1aa" 
+                                        flex={true} 
+                                        alpha={false} 
+                                        stroke={false} 
+                                        width={true} 
+                                        weight={true} 
+                                        italic={true} 
+                                    />
+                                </div>
+                            </div>
                             <h2 className="text-xl sm:text-2xl font-medium tracking-tight text-secondary max-w-xl">
                                 Full-Stack Developer crafting elegant, high-performance web experiences.
                             </h2>
