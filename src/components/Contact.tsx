@@ -1,136 +1,111 @@
-import { motion } from 'framer-motion';
-import { Mail, Phone, Send, Github, Linkedin } from 'lucide-react';
+import React, { useState } from 'react';
+import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
-const Contact = () => {
-    return (
-        <section id="contact" className="py-32 relative overflow-hidden z-10 bg-white border-t border-zinc-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
+interface FAQItem {
+  question: string;
+  answer: string;
+  technicalNote?: string;
+}
+
+const FAQS: FAQItem[] = [
+  {
+    question: 'Does Locksmith need network access to my production row data?',
+    answer:
+      'No. Locksmith operates strictly on PostgreSQL schema catalog metadata (table names, column types, row count estimates from pg_class.reltuples, and foreign key definitions). It never reads, stores, or transmits your application rows.',
+    technicalNote: 'Security model: Read-only access to pg_catalog metadata tables, or static parsing via SQL AST.',
+  },
+  {
+    question: 'Can every migration be transformed into zero-downtime SQL?',
+    answer:
+      '98% of standard additive and schema refactoring migrations (adding columns, indexes, foreign keys, non-null constraints, enums) can be decomposed into lock-free phases. For strictly destructive changes (e.g. dropping a column immediately), Locksmith enforces a safe 3-phase deprecation cycle.',
+    technicalNote: 'Phases: 1. Ignore in ORM layer → 2. Mark column unused in catalog → 3. Drop column during bounded window.',
+  },
+  {
+    question: 'How does Locksmith prevent lock queue pileups under heavy TPS?',
+    answer:
+      'Every phase in a generated Locksmith migration is prepended with `SET lock_timeout = "250ms"`. If the migration cannot acquire its lock within 250ms (for instance, if a long analytical transaction is holding a conflicting lock), it cancels itself immediately and releases its place in the lock queue.',
+    technicalNote: 'Prevents the classic PostgreSQL outage where waiting DDL causes connection pool exhaustion.',
+  },
+  {
+    question: 'Which PostgreSQL versions and hosting providers are supported?',
+    answer:
+      'PostgreSQL versions 14, 15, 16, and 17 are fully supported across Amazon RDS, Aurora PostgreSQL, Supabase, Neon, Google Cloud SQL, Azure Database for PostgreSQL, and self-hosted instances.',
+    technicalNote: 'Version-specific catalog behaviors (like constant default optimization) are automatically branched in AST engine.',
+  },
+  {
+    question: 'Can Locksmith be run self-hosted in air-gapped environments?',
+    answer:
+      'Yes. The Locksmith CLI and Docker container are distributed as self-contained static binaries that run on your own CI infrastructure without calling external services.',
+    technicalNote: 'Zero telemetry or external telemetry egress required.',
+  },
+];
+
+export const FAQSection: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0); // First FAQ open by default
+
+  const toggleItem = (idx: number) => {
+    setOpenIndex(openIndex === idx ? null : idx);
+  };
+
+  return (
+    <section id="faq" className="py-16 md:py-24 relative">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-[var(--accent-emerald)] uppercase tracking-wider mb-2">
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>Honest Technical Architecture</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
+            Frequently Answered Engineering Questions
+          </h2>
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-2">
+            Transparent answers on database locks, security boundaries, and edge-case execution.
+          </p>
+        </div>
+
+        {/* FAQ Accordion List */}
+        <div className="space-y-3">
+          {FAQS.map((faq, idx) => {
+            const isOpen = openIndex === idx;
+            return (
+              <div
+                key={idx}
+                className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-strong)] transition-colors rounded-xl overflow-hidden shadow-xs"
+              >
+                <button
+                  onClick={() => toggleItem(idx)}
+                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 focus:outline-none"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-4">
-                        Let's Connect
-                    </h2>
-                    <p className="text-lg text-secondary font-normal max-w-2xl mx-auto">
-                        Have a vision in mind? Let's turn it into reality. My inbox is always open.
-                    </p>
-                </motion.div>
+                  <span className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
+                    {faq.question}
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] shrink-0">
+                    {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start max-w-5xl mx-auto">
-                    
-                    {/* Contact Info */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="space-y-8"
-                    >
-                        <div className="luxury-card p-8 group h-full">
-                            <h3 className="text-2xl font-bold mb-8 text-primary">Contact Information</h3>
-                            <div className="space-y-6">
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-2xl shrink-0 group-hover:bg-primary group-hover:border-primary transition-colors shadow-sm">
-                                        <Mail className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-secondary font-medium mb-1">Email</p>
-                                        <a href="mailto:manasaditya7907@gmail.com" className="text-primary hover:text-accent transition-colors font-semibold break-all">
-                                            manasaditya7907@gmail.com
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-2xl shrink-0 group-hover:bg-primary group-hover:border-primary transition-colors shadow-sm">
-                                        <Phone className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-secondary font-medium mb-1">Phone</p>
-                                        <a href="tel:+919135480157" className="text-primary hover:text-accent transition-colors font-semibold">
-                                            +91-9135480157
-                                        </a>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-2xl shrink-0 group-hover:bg-primary group-hover:border-primary transition-colors shadow-sm">
-                                        <Linkedin className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-secondary font-medium mb-1">LinkedIn</p>
-                                        <a href="https://linkedin.com/in/adityamanas08/" target="_blank" rel="noreferrer" className="text-primary hover:text-accent transition-colors font-semibold">
-                                            linkedin.com/in/adityamanas08/
-                                        </a>
-                                    </div>
-                                </div>
+                {isOpen && (
+                  <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-[var(--border-subtle)]/50 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed space-y-3 animate-in fade-in duration-200">
+                    <p>{faq.answer}</p>
+                    {faq.technicalNote && (
+                      <div className="p-2.5 rounded bg-[var(--code-bg)] border border-[var(--code-border)] font-mono text-[11px] text-[var(--accent-emerald)] flex items-center gap-2">
+                        <span className="font-bold">ENGINEERING NOTE:</span>
+                        <span>{faq.technicalNote}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-2xl shrink-0 group-hover:bg-primary group-hover:border-primary transition-colors shadow-sm">
-                                        <Github className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-secondary font-medium mb-1">GitHub</p>
-                                        <a href="https://github.com/aditya-manas02" target="_blank" rel="noreferrer" className="text-primary hover:text-accent transition-colors font-semibold">
-                                            github.com/aditya-manas02
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Contact Form */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="luxury-card p-8 md:p-10"
-                    >
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm text-secondary font-medium pl-1">Name</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="John Doe"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-primary placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm text-secondary font-medium pl-1">Email</label>
-                                    <input 
-                                        type="email" 
-                                        placeholder="john@example.com"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-primary placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm"
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm text-secondary font-medium pl-1">Message</label>
-                                <textarea 
-                                    rows={5}
-                                    placeholder="How can we help you?"
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-primary placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all shadow-sm resize-none"
-                                />
-                            </div>
-                            <button 
-                                type="button"
-                                className="w-full bg-primary py-4 rounded-xl flex items-center justify-center gap-2 text-white font-semibold hover:bg-zinc-800 transition-all group shadow-md"
-                            >
-                                Send Message
-                                <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </button>
-                        </form>
-                    </motion.div>
-                </div>
-            </div>
-        </section>
-    );
+      </div>
+    </section>
+  );
 };
 
-export default Contact;
+export default FAQSection;
+

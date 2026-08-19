@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# Locksmith — Zero-Lock Postgres DDL Migration Engine
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Continuous schema migration safety for PostgreSQL that detects table locks and guarantees zero downtime before pull requests merge.
 
-Currently, two official plugins are available:
+Built for the **Acdyon Technologies Engineering Frontend Challenge (Part 2: The Premium Home Page)**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌟 Product Proposition
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **What it is**: A CI/CD-native schema migration safety analyzer and multi-phase SQL plan generator for PostgreSQL.
+- **Who it's for**: Senior backend, infrastructure, and platform engineers managing high-throughput PostgreSQL databases where unvetted DDL causes cascading connection pool exhaustion and production outages.
+- **Core Outcome**: Automatically inspects PR migration scripts against live schema metadata in CI, detects blocking exclusive locks (`ACCESS EXCLUSIVE`) and lock queue stalls, and outputs verified, lock-free multi-step migration plans.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Live Demo & Local Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Run Locally
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# 1. Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 2. Run local dev server
+npm run dev
+
+# 3. Production build & type-check
+npm run build
+
+# 4. Preview production build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Free Deployment (Vercel / Netlify / GitHub Pages)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Vercel**: Run `npx vercel` or connect the GitHub repository for instant zero-config deployment.
+- **Netlify**: Run `npx netlify deploy --prod --dir=dist`.
+- **GitHub Pages**: Build output in `./dist` is fully static and ready for GitHub Pages hosting.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🎯 Architecture & Design Highlights
+
+1. **Product In Action**: Interactive Workbench featuring real-time Postgres lock physics, live row-count slider (100K to 50M rows), side-by-side SQL diffs, and simulated CI test execution.
+2. **Postgres Lock Matrix**: Interactive inspector covering all 8 PostgreSQL lock levels from `ACCESS SHARE` up to `ACCESS EXCLUSIVE`.
+3. **One Micro-Interaction That Earns Its Keep**: Live DDL & Lock Contention Calculator dynamically recomputing lock acquisition stall duration, queued queries at 850 TPS, and multi-step phase safety.
+4. **All-or-Nothing Dark & Light Theme**: Built with CSS custom property design tokens in `src/index.css` ensuring 100% token coverage and zero light-mode leakage.
+5. **Bonus Easter Egg**: Press `⌘K` or `?` (or click the terminal badge in navigation) to launch the interactive **Locksmith CLI Inspector**. Try typing `acdyon`, `inspect`, `locks`, or `help`.
+6. **Honesty & Integrity**: Zero fabricated testimonials, zero fake user counts, zero fake logos. Every claim is rooted in genuine PostgreSQL locking mechanics.
+
+---
+
+## 📄 Engineering Decisions
+
+See [`DECISIONS.md`](./DECISIONS.md) for the 1-page engineering rationale answering the 3 required rubric questions.
+

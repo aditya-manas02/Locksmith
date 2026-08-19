@@ -1,202 +1,135 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Github, Linkedin, ArrowRight, MapPin, Download, Sparkles } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
-import profilePic from '../assets/formal-pic-2.jpg';
+import React, { useState } from 'react';
+import { ArrowRight, Check, Copy, ShieldAlert, Zap, Database, GitPullRequest } from 'lucide-react';
 
-import TextPressure from './TextPressure';
+interface HeroProps {
+  onOpenEasterEgg: () => void;
+}
 
-// Reusable 3D Tilt Card Component
-const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+export const Hero: React.FC<HeroProps> = ({ onOpenEasterEgg: _onOpenEasterEgg }) => {
+  const [copied, setCopied] = useState(false);
+  const commandText = 'npx locksmith-ci verify ./migrations';
 
-    const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
-    const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
+  const handleCopy = () => {
+    navigator.clipboard.writeText(commandText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  return (
+    <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
+      {/* Background radial highlight & subtle grid */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none" />
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const xPct = mouseX / width - 0.5;
-        const yPct = mouseY / height - 0.5;
-        x.set(xPct);
-        y.set(yPct);
-    };
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+          
+          {/* Status / Category Pill */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-[var(--bg-surface-elevated)] border border-[var(--border-strong)] text-[var(--text-secondary)] mb-6 shadow-xs">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Continuous Postgres DDL Safety · Zero Table Locks</span>
+          </div>
 
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
+          {/* Value Prop Headline */}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--text-primary)] leading-[1.1] mb-6">
+            Ship Postgres migrations{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">
+              without locking your database.
+            </span>
+          </h1>
 
-    return (
-        <motion.div
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className={`luxury-card relative flex-col flex overflow-hidden ${className}`}
-        >
-            <div style={{ transform: "translateZ(30px)" }} className="h-full w-full flex flex-col">
-                {children}
+          {/* One-Sentence Subhead */}
+          <p className="text-base sm:text-xl text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-8">
+            Locksmith simulates DDL in CI against your schema catalog, flags <code className="px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono bg-rose-500/10 text-rose-500 border border-rose-500/20">ACCESS EXCLUSIVE</code> lock stalls before code merges, and generates verified zero-downtime multi-step SQL.
+          </p>
+
+          {/* CTA & CLI Command Group */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-12">
+            <a
+              href="#workbench"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm font-semibold bg-[var(--accent-emerald)] text-black hover:opacity-90 transition-all shadow-md group"
+            >
+              <span>Inspect Live DDL Workbench</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+
+            {/* Quickstart Command Widget */}
+            <div className="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-lg bg-[var(--code-bg)] border border-[var(--code-border)] text-xs font-mono text-[var(--text-secondary)] shadow-inner">
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-500 select-none">$</span>
+                <span className="text-[var(--text-primary)]">{commandText}</span>
+              </div>
+              <button
+                onClick={handleCopy}
+                aria-label="Copy CLI Command"
+                className="p-1 rounded hover:bg-[var(--bg-surface-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
             </div>
-        </motion.div>
-    );
-};
+          </div>
 
-const Hero = () => {
-    const [time, setTime] = useState(new Date());
-
-    useEffect(() => {
-        const timer = setInterval(() => setTime(new Date()), 1000);
-        return () => clearInterval(timer);
-    }, []);
-
-    return (
-        <section id="hero" className="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden mesh-bg">
-            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                
-                {/* BENTO GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[auto]">
-                    
-                    {/* 1. Main Intro Card (Spans 8 cols) */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="md:col-span-8 luxury-card p-10 md:p-14 flex flex-col justify-between min-h-[400px]"
-                    >
-                        <div>
-                            <span className="luxury-pill px-5 py-2 text-xs font-semibold tracking-wide text-secondary mb-8 inline-block">
-                                AVAILABLE FOR WORK
-                            </span>
-                            <div className="flex items-center gap-2 mb-6 w-full" style={{ height: '80px', maxWidth: '600px' }}>
-                                <div className="flex-1 h-full">
-                                    <TextPressure 
-                                        text="Aditya" 
-                                        textColor="#18181b" 
-                                        flex={true} 
-                                        alpha={false} 
-                                        stroke={false} 
-                                        width={true} 
-                                        weight={true} 
-                                        italic={true} 
-                                    />
-                                </div>
-                                <div className="flex-1 h-full">
-                                    <TextPressure 
-                                        text="Manas" 
-                                        textColor="#a1a1aa" 
-                                        flex={true} 
-                                        alpha={false} 
-                                        stroke={false} 
-                                        width={true} 
-                                        weight={true} 
-                                        italic={true} 
-                                    />
-                                </div>
-                            </div>
-                            <h2 className="text-xl sm:text-2xl font-medium tracking-tight text-secondary max-w-xl">
-                                Full-Stack Developer crafting elegant, high-performance web experiences.
-                            </h2>
-                        </div>
-                        
-                        <div className="mt-12 flex flex-wrap items-center gap-4">
-                            <a 
-                                href="#projects"
-                                className="group flex items-center justify-center gap-2 bg-primary text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-zinc-800 transition-colors shadow-lg shadow-black/10"
-                            >
-                                View Projects
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </a>
-                            <div className="flex gap-2">
-                                <a href="https://github.com/aditya-manas02" target="_blank" rel="noreferrer" className="w-12 h-12 bg-zinc-50 border border-zinc-200 text-primary rounded-full flex items-center justify-center hover:bg-zinc-100 transition-colors shadow-sm">
-                                    <Github className="w-5 h-5" />
-                                </a>
-                                <a href="https://www.linkedin.com/in/adityamanas08/" target="_blank" rel="noreferrer" className="w-12 h-12 bg-zinc-50 border border-zinc-200 text-primary rounded-full flex items-center justify-center hover:bg-zinc-100 transition-colors shadow-sm">
-                                    <Linkedin className="w-5 h-5" />
-                                </a>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* 2. 3D Profile Picture (Spans 4 cols) */}
-                    <motion.div 
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="md:col-span-4 min-h-[400px] perspective-[1000px]"
-                    >
-                        <TiltCard className="w-full h-full p-2">
-                            <div className="w-full h-full rounded-2xl overflow-hidden relative group">
-                                <img 
-                                    src={profilePic} 
-                                    alt="Aditya Manas" 
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
-                            </div>
-                        </TiltCard>
-                    </motion.div>
-
-                    {/* 3. Location & Time Card */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="md:col-span-4 luxury-card p-8 flex flex-col items-center justify-center text-center group"
-                    >
-                        <div className="w-12 h-12 bg-blue-50 text-accent rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <MapPin className="w-6 h-6" />
-                        </div>
-                        <h3 className="font-bold text-lg text-primary">Patna, India</h3>
-                        <p className="text-secondary font-mono text-sm mt-1">
-                            {time.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })} IST
-                        </p>
-                    </motion.div>
-
-                    {/* 4. Currently Learning */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="md:col-span-4 luxury-card p-8 flex flex-col items-center justify-center text-center group"
-                    >
-                        <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <Sparkles className="w-6 h-6" />
-                        </div>
-                        <h3 className="font-bold text-lg text-primary">Exploring AI & LLMs</h3>
-                        <p className="text-secondary text-sm mt-1">Prompt Engineering & GenAI Apps</p>
-                    </motion.div>
-
-                    {/* 5. Download Resume */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="md:col-span-4 perspective-[1000px]"
-                    >
-                        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                            <TiltCard className="w-full h-full p-8 flex items-center justify-center group bg-primary !border-none !text-white cursor-pointer hover:bg-zinc-800 transition-colors">
-                                <div className="flex flex-col items-center gap-3">
-                                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:-translate-y-2 transition-transform duration-300">
-                                        <Download className="w-6 h-6 text-white" />
-                                    </div>
-                                    <span className="font-bold text-lg tracking-tight">Download Resume</span>
-                                </div>
-                            </TiltCard>
-                        </a>
-                    </motion.div>
-
-                </div>
+          {/* Engineering Guarantees Banner (Honest, Technical Facts) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full max-w-4xl text-left">
+            <div className="p-3.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-1">
+                <ShieldAlert className="w-3.5 h-3.5 text-emerald-500" />
+                <span>LOCK BOUND</span>
+              </div>
+              <div className="text-base sm:text-lg font-bold text-[var(--text-primary)]">Max 250ms</div>
+              <div className="text-[11px] text-[var(--text-secondary)]">Strict lock_timeout enforcement</div>
             </div>
-        </section>
-    );
+
+            <div className="p-3.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-1">
+                <Zap className="w-3.5 h-3.5 text-amber-500" />
+                <span>CI VELOCITY</span>
+              </div>
+              <div className="text-base sm:text-lg font-bold text-[var(--text-primary)]">&lt; 1.2s Analysis</div>
+              <div className="text-[11px] text-[var(--text-secondary)]">AST & metadata shadow parse</div>
+            </div>
+
+            <div className="p-3.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-1">
+                <Database className="w-3.5 h-3.5 text-blue-500" />
+                <span>PG COMPATIBILITY</span>
+              </div>
+              <div className="text-base sm:text-lg font-bold text-[var(--text-primary)]">Postgres 14 - 17</div>
+              <div className="text-[11px] text-[var(--text-secondary)]">Full DDL catalog ruleset</div>
+            </div>
+
+            <div className="p-3.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-1">
+                <GitPullRequest className="w-3.5 h-3.5 text-emerald-400" />
+                <span>SAFETY PR BOT</span>
+              </div>
+              <div className="text-base sm:text-lg font-bold text-[var(--text-primary)]">Automated DDL Diffs</div>
+              <div className="text-[11px] text-[var(--text-secondary)]">In-line review comments with safe SQL</div>
+            </div>
+          </div>
+
+          {/* Supported Ecosystem Badges (Framed honestly as parser engines) */}
+          <div className="mt-12 pt-8 border-t border-[var(--border-subtle)] w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[var(--text-muted)]">
+            <span className="uppercase tracking-wider">Supported ORMs & Migration Frameworks:</span>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-[var(--text-secondary)] font-medium text-xs">
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Prisma</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Drizzle ORM</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">ActiveRecord</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Django ORM</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Flyway</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Alembic</span>
+              <span className="px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">Raw SQL</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Hero;
+

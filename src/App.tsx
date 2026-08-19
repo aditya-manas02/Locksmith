@@ -1,72 +1,95 @@
-import { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Projects from './components/Projects';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Education from './components/Education';
-import Certificates from './components/Certificates';
-import Contact from './components/Contact';
-import CustomCursor from './components/CustomCursor';
+import ProductWorkbench from './components/Projects'; // ProductWorkbench component
+import LockMatrix from './components/Skills'; // LockMatrix component
+import WorkflowSection from './components/Experience'; // WorkflowSection component
+import IntegrationSection from './components/Education'; // IntegrationSection component
+import FAQSection from './components/Contact'; // FAQSection component
+import EasterEggModal from './components/Certificates'; // EasterEggModal component
+import Footer from './components/CustomCursor'; // Footer component
 
-function App() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+export function App() {
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('locksmith-theme');
+      if (saved) return saved === 'dark';
+      return true; // Default to dark mode for developer tooling aesthetic
     }
+    return true;
+  });
 
-    requestAnimationFrame(raf);
+  const [easterEggOpen, setEasterEggOpen] = useState<boolean>(false);
 
-    return () => {
-      lenis.destroy();
+  // Sync dark class on <html>
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+      localStorage.setItem('locksmith-theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('locksmith-theme', 'light');
+    }
+  }, [darkMode]);
+
+  // Global keyboard shortcuts (Cmd+K / Ctrl+K / ?)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setEasterEggOpen((prev) => !prev);
+      } else if (e.key === '?' && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        setEasterEggOpen((prev) => !prev);
+      }
     };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
-    <div className="bg-background text-primary min-h-screen selection:bg-accent/20 selection:text-accent">
-      <CustomCursor />
-      <Navbar />
-      
-      <main className="relative z-10">
-        <Hero />
-        
-        {/* Soft elegant separator */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent" />
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] relative selection:bg-emerald-500/20 selection:text-emerald-400">
+      {/* Navigation */}
+      <Navbar
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        onOpenEasterEgg={() => setEasterEggOpen(true)}
+      />
 
-        <div className="bg-background">
-          <Projects />
-          <Skills />
-          <Experience />
-          <Education />
-          <Certificates />
-          <Contact />
-        </div>
+      {/* Main Page Sections */}
+      <main className="w-full overflow-x-hidden">
+        {/* Section 1: Hero */}
+        <Hero onOpenEasterEgg={() => setEasterEggOpen(true)} />
+
+        {/* Section 2: Product In Action (Interactive Migration Workbench) */}
+        <ProductWorkbench />
+
+        {/* Section 3: Lock Contention Hierarchy */}
+        <LockMatrix />
+
+        {/* Section 4: CI/CD Safety Pipeline Mechanics */}
+        <WorkflowSection />
+
+        {/* Section 5: Integration Configurations */}
+        <IntegrationSection />
+
+        {/* Section 6: Architecture FAQs */}
+        <FAQSection />
       </main>
-      
+
       {/* Footer */}
-      <footer className="py-12 text-center border-t border-zinc-200 bg-white relative z-10">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-          <h2 className="text-xl font-bold tracking-tight mb-2 text-primary">Aditya Manas</h2>
-          <p className="text-secondary text-sm">Building elegant digital experiences.</p>
-          <div className="mt-8 text-xs text-zinc-400">
-            © {new Date().getFullYear()} All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer onOpenEasterEgg={() => setEasterEggOpen(true)} />
+
+      {/* Easter Egg Terminal Modal */}
+      <EasterEggModal
+        isOpen={easterEggOpen}
+        onClose={() => setEasterEggOpen(false)}
+      />
     </div>
   );
 }
 
 export default App;
+

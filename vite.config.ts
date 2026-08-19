@@ -8,12 +8,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  optimizeDeps: {
-    include: ['gsap', 'gsap/ScrollTrigger', 'lenis'],
-  },
   server: {
     fs: {
       strict: false,
     },
   },
 })
+
